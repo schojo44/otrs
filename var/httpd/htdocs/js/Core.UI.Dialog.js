@@ -89,7 +89,7 @@ Core.UI.Dialog = (function (TargetNS) {
      */
     function FocusFirstElement() {
         var $FirstElement = $('div.Dialog:visible .Content')
-                .find('a:visible, input:visible, textarea:visible, select:visible, button:visible')
+                .find('a:visible, input:visible, textarea:visible, select:visible')
                 .filter(':first'),
             $FocusField;
 
@@ -225,7 +225,7 @@ Core.UI.Dialog = (function (TargetNS) {
             DialogHTML,
             FullsizeMode = false;
 
-        DialogHTML = '<div class="Dialog">';
+        DialogHTML = '<div class="Dialog" style="display: none;">';
         if (!Params.HideHeader) {
             DialogHTML += '<div class="Header"><a class="Close" title="' + Core.Language.Translate('Close') + '" href="#"><i class="fa fa-times"></i></a></div>';
         }
@@ -318,7 +318,7 @@ Core.UI.Dialog = (function (TargetNS) {
         // If Dialog is a modal dialog, initialize overlay
         if (Params.Modal) {
             $('<div id="Overlay" tabindex="-1">').appendTo('body');
-            $('body').css({
+            $('body').addClass('HasOverlay').css({
                 'overflow': 'hidden'
             });
             $('#Overlay').height($(document).height()).css('top', 0);
@@ -435,7 +435,7 @@ Core.UI.Dialog = (function (TargetNS) {
         }
 
         // Add Dialog to page
-        $Dialog.appendTo('body');
+        $Dialog.appendTo('body').fadeIn();
 
         // Check if "ContentFooter" is used in Content
         if ($Dialog.find('.Content .ContentFooter').length) {
@@ -688,7 +688,7 @@ Core.UI.Dialog = (function (TargetNS) {
 
         $Dialog.remove();
         $('#Overlay').remove();
-        $('body').css({
+        $('body').removeClass('HasOverlay').css({
             'overflow': 'auto'
         });
         $(document).unbind('keydown.Dialog').unbind('keypress.Dialog').unbind('click.Dialog');

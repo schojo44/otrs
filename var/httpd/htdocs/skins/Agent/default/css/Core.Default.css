@@ -79,6 +79,7 @@ body {
 
 .DialogWaiting {
     text-align: center;
+    padding: 20px 40px;
 }
 
 .DialogWaiting i {
