@@ -22,7 +22,11 @@ $Kernel::OM->ObjectParamAdd(
 );
 my $HelperObject = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
 
-my $String = '<?xml version="1.0" encoding="utf-8" ?>
+my $Version = $Kernel::OM->Get('Kernel::Config')->Get('Version');
+($Version) = $Version =~ m{^(\d+\.\d+)};
+$Version .= '.x';
+
+my $String = qq|<?xml version="1.0" encoding="utf-8" ?>
 <otrs_package version="1.1">
     <Name>TestPackage1</Name>
     <Version>0.0.1</Version>
@@ -30,16 +34,16 @@ my $String = '<?xml version="1.0" encoding="utf-8" ?>
     <URL>http://otrs.com/</URL>
     <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
     <Description Lang="en">TestPackage1.</Description>
-    <Framework>6.0.x</Framework>
+    <Framework>$Version</Framework>
     <BuildDate>2016-10-11 02:35:46</BuildDate>
     <BuildHost>yourhost.example.com</BuildHost>
     <Filelist>
         <File Location="Kernel/Config/Files/XML/TestPackage1.xml" Permission="660" Encode="Base64">PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiID8+CjxvdHJzX2NvbmZpZyB2ZXJzaW9uPSIyLjAiIGluaXQ9IkFwcGxpY2F0aW9uIj4KICAgIDxTZXR0aW5nIE5hbWU9IlRlc3RQYWNrYWdlMTo6U2V0dGluZzEiIFJlcXVpcmVkPSIwIiBWYWxpZD0iMSI+IAogICAgICAgIDxEZXNjcmlwdGlvbiBUcmFuc2xhdGFibGU9IjEiPlRlc3QgU2V0dGluZy48L0Rlc2NyaXB0aW9uPgogICAgICAgIDxLZXl3b3Jkcz5UZXN0UGFja2FnZTwvS2V5d29yZHM+CiAgICAgICAgPE5hdmlnYXRpb24+Q29yZTo6VGVzdFBhY2thZ2U8L05hdmlnYXRpb24+CiAgICAgICAgICAgIDxWYWx1ZT4KICAgICAgICAgICAgICAgIDxJdGVtIFZhbHVlVHlwZT0iU3RyaW5nIj48L0l0ZW0+CiAgICAgICAgICAgIDwvVmFsdWU+CiAgICA8L1NldHRpbmc+Cjwvb3Ryc19jb25maWc+Cg==</File>
     </Filelist>
 </otrs_package>
-';
+|;
 
-my $String2 = '<?xml version="1.0" encoding="utf-8" ?>
+my $String2 = qq|<?xml version="1.0" encoding="utf-8" ?>
 <otrs_package version="1.1">
     <Name>TestPackage2</Name>
     <Version>0.0.1</Version>
@@ -47,14 +51,14 @@ my $String2 = '<?xml version="1.0" encoding="utf-8" ?>
     <URL>http://otrs.com/</URL>
     <License>GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007</License>
     <Description Lang="en">TestPackage2.</Description>
-    <Framework>6.0.x</Framework>
+    <Framework>$Version</Framework>
     <BuildDate>2016-10-11 02:36:29</BuildDate>
     <BuildHost>yourhost.example.com</BuildHost>
     <Filelist>
         <File Location="Kernel/Config/Files/XML/TestPackage2.xml" Permission="660" Encode="Base64">PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiID8+CjxvdHJzX2NvbmZpZyB2ZXJzaW9uPSIyLjAiIGluaXQ9IkFwcGxpY2F0aW9uIj4KICAgIDxTZXR0aW5nIE5hbWU9IlRlc3RQYWNrYWdlMjo6U2V0dGluZzEiIFJlcXVpcmVkPSIwIiBWYWxpZD0iMSI+CiAgICAgICAgPERlc2NyaXB0aW9uIFRyYW5zbGF0YWJsZT0iMSI+VGVzdCBTZXR0aW5nLjwvRGVzY3JpcHRpb24+CiAgICAgICAgPE5hdmlnYXRpb24+Q29yZTo6VGVzdFBhY2thZ2U8L05hdmlnYXRpb24+CiAgICAgICAgPFZhbHVlPgogICAgICAgICAgICA8SXRlbSBWYWx1ZVR5cGU9IlN0cmluZyI+PC9JdGVtPgogICAgICAgIDwvVmFsdWU+CiAgICA8L1NldHRpbmc+CiAgICA8U2V0dGluZyBOYW1lPSJUZXN0UGFja2FnZTI6OlNldHRpbmcyIiBSZXF1aXJlZD0iMCIgVmFsaWQ9IjEiPgogICAgICAgIDxEZXNjcmlwdGlvbiBUcmFuc2xhdGFibGU9IjEiPlRlc3QgU2V0dGluZy48L0Rlc2NyaXB0aW9uPgogICAgICAgIDxOYXZpZ2F0aW9uPkNvcmU6OlRlc3RQYWNrYWdlPC9OYXZpZ2F0aW9uPgogICAgICAgIDxWYWx1ZT4KICAgICAgICAgICAgPEl0ZW0gVmFsdWVUeXBlPSJTdHJpbmciPjwvSXRlbT4KICAgICAgICA8L1ZhbHVlPgogICAgPC9TZXR0aW5nPgo8L290cnNfY29uZmlnPg==</File>
     </Filelist>
 </otrs_package>
-';
+|;
 
 my $PackageObject = $Kernel::OM->Get('Kernel::System::Package');
 
