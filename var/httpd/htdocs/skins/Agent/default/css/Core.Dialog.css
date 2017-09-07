@@ -31,7 +31,7 @@
     transition: filter ease 0.2s;
 }
 
-body.HasOverlay #AppWrapper {
+body.HasOverlay > #AppWrapper {
     filter: blur(5px);
 }
 
