@@ -168,6 +168,10 @@ p.NoItemsInfo i {
     line-height: 100px;
 }
 
+#ConfigTree a.jstree-disabled {
+    color: #777;
+}
+
 #ConfigTreeSearch {
     width: 100%;
     box-sizing: border-box;
@@ -175,8 +179,8 @@ p.NoItemsInfo i {
     padding: 5px;
 }
 
-#ConfigTree .jstree-hovered,
-#ConfigTree .jstree-wholerow-hovered {
+#ConfigTree .jstree-hovered:not(.jstree-disabled),
+#ConfigTree .jstree-wholerow-hovered:not(.jstree-disabled) {
     background: #ddd !important;
 }
 
