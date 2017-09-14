@@ -313,7 +313,8 @@ $Selenium->RunTest(
 
         # click to 'Add customer user'
         $Selenium->WaitFor(
-            JavaScript => 'return typeof($) === "function" && $(".CallForAction.Fullsize.Center").length' );
+            JavaScript => 'return typeof($) === "function" && $(".CallForAction.Fullsize.Center").length'
+        );
         $Selenium->find_element("//button[\@class='CallForAction Fullsize Center']")->click();
         $Selenium->WaitFor( JavaScript => 'return typeof($) === "function" && $("#UserFirstname").length' );
 
