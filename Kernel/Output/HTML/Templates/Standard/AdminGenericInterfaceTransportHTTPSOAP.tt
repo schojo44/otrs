@@ -95,21 +95,26 @@
                             <div class="Clear"></div>
 [% END %]
 
-                            <label class="Mandatory" for="SOAPAction"><span class="Marker">*</span>[% Translate("Set SOAPAction") | html %]:</label>
+[% IF Data.CommunicationType == 'Requester' %]
+[% USE SOAPActionLabel             = String(Translate("Set SOAPAction")) %]
+[% USE SOAPActionExplanationYes    = String(Translate("Set to \"Yes\" in order to send a filled SOAPAction header.")) %]
+[% USE SOAPActionExplanationNo     = String(Translate("Set to \"No\" in order to send an empty SOAPAction header.")) %]
+[% USE SOAPActionSchemeExplanation = String(Translate("Some web services require a specific construction.")) %]
+[% ELSE %]
+[% USE SOAPActionLabel             = String(Translate("Check SOAPAction")) %]
+[% USE SOAPActionExplanationYes    = String(Translate("Set to \"Yes\" in order to check the received SOAPAction header (if not empty).")) %]
+[% USE SOAPActionExplanationNo     = String(Translate("Set to \"No\" in order to ignore the received SOAPAction header.")) %]
+[% USE SOAPActionSchemeExplanation = String(Translate("Some web services send a specific construction.")) %]
+[% END %]
+                            <label class="Mandatory" for="SOAPAction"><span class="Marker">*</span>[% SOAPActionLabel | html %]:</label>
                             <div class="Field">
                                 [% Data.SOAPActionStrg %]
                                 <div id="SOAPActionError" class="TooltipErrorMessage"><p>[% Translate("This field is required.") | html %]</p></div>
                                 <div id="SOAPActionServerError" class="TooltipErrorMessage"><p>[% Translate(Data.SOAPActionServerErrorMessage) | html %]</p></div>
                                 <p class="FieldExplanation">
-[% IF Data.CommunicationType == 'Requester' %]
-                                    [% Translate("Set to \"Yes\" in order to send a filled SOAPAction header.") | html %]
+                                    [% SOAPActionExplanationYes | html %]
                                     <br/>
-                                    [% Translate("Set to \"No\" in order to send an empty SOAPAction header.") | html %]
-[% ELSE %]
-                                    [% Translate("Set to \"Yes\" in order to check the received SOAPAction header (if not empty).") | html %]
-                                    <br/>
-                                    [% Translate("Set to \"No\" in order to ignore the received SOAPAction header.") | html %]
-[% END %]
+                                    [% SOAPActionExplanationNo | html %]
                                 </p>
                             </div>
                             <div class="Clear"></div>
@@ -125,11 +130,7 @@
                                         <p class="FieldExplanation">
                                             [% Translate("Select how SOAPAction should be constructed.") | html %]
                                             <br/>
-[% IF Data.CommunicationType == 'Requester' %]
-                                            [% Translate("Some web services require a specific construction.") | html %]
-[% ELSE %]
-                                            [% Translate("Some web services send a specific construction.") | html %]
-[% END %]
+                                            [% SOAPActionSchemeExplanation | html %]
                                         </p>
                                     </div>
                                     <div class="Clear"></div>
