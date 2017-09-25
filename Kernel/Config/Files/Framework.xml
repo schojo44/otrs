@@ -542,17 +542,17 @@
         </Setting>
     </ConfigItem>
     <ConfigItem Name="TimeInputMinutesStep" Required="1" Valid="1">
-        <Description Translatable="1">Defines the available steps in time selections. Select "Minute" to be able to select all minutes of one hour from 1-59. Select "30 Minutes" to only make full and half hours available.</Description>
+        <Description Translatable="1">Defines the available steps in time selections. Select "1 minute" to be able to select all minutes of one hour from 1-59. Select "30 minutes" to only make full and half hours available.</Description>
         <Group>Framework</Group>
         <SubGroup>Core::Time</SubGroup>
         <Setting>
             <Option SelectedID="1">
-                <Item Key="1" Translatable="1">Minute</Item>
-                <Item Key="2" Translatable="1">2 Minutes</Item>
-                <Item Key="5" Translatable="1">5 Minutes</Item>
-                <Item Key="10" Translatable="1">10 Minutes</Item>
-                <Item Key="15" Translatable="1">15 Minutes</Item>
-                <Item Key="30" Translatable="1">30 Minutes</Item>
+                <Item Key="1" Translatable="1">1 minute</Item>
+                <Item Key="2" Translatable="1">2 minutes</Item>
+                <Item Key="5" Translatable="1">5 minutes</Item>
+                <Item Key="10" Translatable="1">10 minutes</Item>
+                <Item Key="15" Translatable="1">15 minutes</Item>
+                <Item Key="30" Translatable="1">30 minutes</Item>
             </Option>
         </Setting>
     </ConfigItem>
