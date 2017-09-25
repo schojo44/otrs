@@ -205,6 +205,7 @@ JAVASCRIPT
 
                 # TODO: remove limitation to chrome.
                 if ( $Selenium->{browser_name} eq 'firefox' ) {
+                    sleep 1;
                     $Self->Is(
                         $Selenium->execute_script("return window.getLastAlert()"),
                         'Sorry, you can only upload 2 files.',
