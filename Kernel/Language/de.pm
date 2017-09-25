@@ -3650,6 +3650,7 @@ sub Data {
         'State Type Historic' => 'Statustypchronik',
         'Until times' => '',
         'Historic Time Range' => 'Historischer Zeitbereich',
+        'Number'              => 'Nummer',
 
         # Perl Module: Kernel/System/Stats/Dynamic/TicketSolutionResponseTime.pm
         'Solution Average' => '',
