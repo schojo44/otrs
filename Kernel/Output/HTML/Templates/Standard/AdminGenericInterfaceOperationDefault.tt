@@ -141,13 +141,15 @@
                         </div>
                         <div class="Clear"></div>
 
+[% IF Data.OperationType == 'Ticket::TicketCreate' || Data.OperationType == 'Ticket::TicketUpdate' %]
                         <label for="IncludeTicketData">[% Translate("Include Ticket Data") | html %]:</label>
                         <div class="Field">
                             [% Data.IncludeTicketDataStrg %]
-                            <p class="FieldExplanation">[% Translate("Include ticket data by response. Only available for TicketCreate and TicketUpdate operations.") | html %]</p>
+                            <p class="FieldExplanation">[% Translate("Include ticket data in response (only available for TicketCreate and TicketUpdate operations).") | html %]</p>
 
                         </div>
                         <div class="Clear"></div>
+[% END %]
 
                         <div class="Field SpacingTop">
                             [% IF Data.Action == 'Change' %]
