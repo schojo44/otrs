@@ -337,7 +337,7 @@
                                     <input type="hidden" id="RetryCountMax" name="RetryCountMax" value="[% Data.RetryCountMax | html %]" />
                                     <p class="FieldExplanation">
                                         [% Translate("Maximum number of retries before a failing request is discarded, not counting the initial request.") | html %]<br />
-                                        [% Translate("Example: If a request is initially triggered at 10:00 with initial interval at '1 minute', retry factor at '2' and maximum retry count at '2', retries would be triggered at 10:01 and 10:02 only.") | html %]<br />
+                                        [% Translate("Example: If a request is initially triggered at 10:00 with initial interval at '1 minute', retry factor at '2' and maximum retry count at '2', retries would be triggered at 10:01 and 10:03 only.") | html %]<br />
                                         [% Translate("Note: Maximum retry count might not be reached if a maximum retry period is configured as well and reached earlier.") | html %]
                                     </p>
                                     <div id="RetryCountMaxServerError" class="TooltipErrorMessage"><p>[% Translate("This field must be empty or contain a positive number.") | html %]</p></div>
