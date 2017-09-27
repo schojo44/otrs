@@ -18,7 +18,7 @@ $Kernel::OM->ObjectParamAdd(
     },
 );
 
-my $HelperObject = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
+my $HelperObject          = $Kernel::OM->Get('Kernel::System::UnitTest::Helper');
 my $CommunicationDBObject = $Kernel::OM->Get('Kernel::System::CommunicationLog::DB');
 
 my $Success = $CommunicationDBObject->CommunicationDelete();
