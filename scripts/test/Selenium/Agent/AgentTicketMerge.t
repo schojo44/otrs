@@ -163,7 +163,7 @@ $Selenium->RunTest(
         # check client side validation
         my $Element = $Selenium->find_element( "#MainTicketNumber", 'css' );
         $Element->send_keys("");
-        $Selenium->find_element( "#submitRichText", 'css' )->VerifiedClick();
+        $Selenium->find_element( "#submitRichText", 'css' )->click();
 
         $Self->Is(
             $Selenium->execute_script(
@@ -175,7 +175,7 @@ $Selenium->RunTest(
 
         # expect error when try to merge ticket with itself
         $Selenium->find_element( "#MainTicketNumber", 'css' )->send_keys( $TicketNumbers[0] );
-        $Selenium->find_element( "#submitRichText",   'css' )->VerifiedClick();
+        $Selenium->find_element( "#submitRichText",   'css' )->click();
 
         $Self->True(
             index( $Selenium->get_page_source(), 'Can\'t merge ticket with itself!' ) > -1,
@@ -191,7 +191,6 @@ $Selenium->RunTest(
         $Selenium->switch_to_window( $Handles->[0] );
 
         # Wait for reload to kick in.
-        sleep 1;
         $Selenium->WaitFor(
             JavaScript =>
                 'return typeof(Core) == "object" && typeof(Core.App) == "object" && Core.App.PageLoadComplete'
@@ -215,7 +214,6 @@ $Selenium->RunTest(
 
         # Try to merge with second test ticket.
         $Selenium->find_element( '#MainTicketNumber', 'css' )->send_keys( $TicketNumbers[1] );
-
         sleep 1;
 
         $Self->False(
@@ -237,11 +235,6 @@ $Selenium->RunTest(
         $Selenium->execute_script("\$('li.ui-menu-item:contains($TicketNumbers[1])').click()");
 
         $Selenium->execute_script("\$('#submitRichText').click();");
-
-        sleep 1;
-        if ( scalar( @{ $Selenium->get_window_handles() } ) == 2 ) {
-            $Selenium->close();
-        }
 
         # return back to zoom view and click on history and switch to its view
         $Selenium->WaitFor( WindowCount => 1 );
