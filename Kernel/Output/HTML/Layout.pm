@@ -3566,7 +3566,7 @@ Produces human readable data size.
 
 Returns
 
-    '123 B'
+    $SizeStr = '123 B';         # example with decimal point: 123.4 MB
 
 =cut
 
@@ -3581,7 +3581,7 @@ sub HumanReadableDataSize {
         return;
     }
 
-    if ( $Param{Size} !~ /^\d+$/ ) {
+    if ( !IsPositiveInteger( $Param{Size} ) ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
             Message  => 'Size must be integer!',
@@ -3589,25 +3589,41 @@ sub HumanReadableDataSize {
         return;
     }
 
-    my $SizeStr        = '';
     my $LanguageObject = $Kernel::OM->Get('Kernel::Language');
+    my $Separator = $LanguageObject->{DecimalSeparator} || '.';    # Separator should not be empty.
 
     # Use convention described on https://en.wikipedia.org/wiki/File_size
-    #   We cannot use floating point output as OTRS has no locale informatin for the decimal mark.
-    if ( $Param{Size} > ( 1024**4 ) ) {
-        my $ReadableSize = int $Param{Size} / ( 1024**4 );
+    my ( $SizeStr, $ReadableSize );
+
+    # Use simple string concatenation to format real number. "sprintf" uses dot (.) as decimal separator unless
+    #   locale and POSIX (LC_NUMERIC) is used. Even in this case, you are not allowed to use custom separator
+    #   (as defined in language files).
+    if ( $Param{Size} >= ( 1024**4 ) ) {
+        $ReadableSize = $Self->_FormatRealNumber(
+            Size => $Param{Size} / ( 1024**4 ),
+            Separator => $Separator,
+        );
         $SizeStr = $LanguageObject->Translate( '%s TB', $ReadableSize );
     }
-    elsif ( $Param{Size} > ( 1024**3 ) ) {
-        my $ReadableSize = int $Param{Size} / ( 1024**3 );
+    elsif ( $Param{Size} >= ( 1024**3 ) ) {
+        $ReadableSize = $Self->_FormatRealNumber(
+            Size => $Param{Size} / ( 1024**3 ),
+            Separator => $Separator,
+        );
         $SizeStr = $LanguageObject->Translate( '%s GB', $ReadableSize );
     }
-    elsif ( $Param{Size} > ( 1024**2 ) ) {
-        my $ReadableSize = int $Param{Size} / ( 1024**2 );
+    elsif ( $Param{Size} >= ( 1024**2 ) ) {
+        $ReadableSize = $Self->_FormatRealNumber(
+            Size => $Param{Size} / ( 1024**2 ),
+            Separator => $Separator,
+        );
         $SizeStr = $LanguageObject->Translate( '%s MB', $ReadableSize );
     }
-    elsif ( $Param{Size} > 1024 ) {
-        my $ReadableSize = int $Param{Size} / (1024);
+    elsif ( $Param{Size} >= 1024 ) {
+        $ReadableSize = $Self->_FormatRealNumber(
+            Size      => $Param{Size} / 1024,
+            Separator => $Separator,
+        );
         $SizeStr = $LanguageObject->Translate( '%s KB', $ReadableSize );
     }
     else {
@@ -6011,6 +6027,44 @@ sub UserInitialsGet {
     }
 
     return $UserInitials;
+}
+
+=head2 _FormatRealNumber()
+
+Format a real number, with one decimal place.
+
+    my $RealNumber = $Self->_FormatRealNumber(
+        Size      => '28.3263',
+        Separator => '.',
+    );
+
+Returns formatted real number with precision of one decimal place:
+
+    $RealNumber = '28.3';
+
+If passed number is an integer, it will be returned as-is.
+
+=cut
+
+sub _FormatRealNumber {
+    my ( $Self, %Param ) = @_;
+
+    my $Size = $Param{Size};
+    my $ReadableSize;
+
+    if ( IsInteger($Size) ) {
+        $ReadableSize = $Size;
+    }
+    else {
+
+        # Get integer and decimal parts.
+        my ( $Integer, $Float ) = split( m{\.}, sprintf( "%.1f", $Size ) );
+
+        # Format size with provided decimal separator.
+        $ReadableSize = $Integer . $Param{Separator} . $Float;
+    }
+
+    return $ReadableSize;
 }
 
 1;
