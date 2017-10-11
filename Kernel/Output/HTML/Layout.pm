@@ -3573,6 +3573,33 @@ Returns
 sub HumanReadableDataSize {
     my ( $Self, %Param ) = @_;
 
+    # Use simple string concatenation to format real number. "sprintf" uses dot (.) as decimal separator unless
+    #   locale and POSIX (LC_NUMERIC) is used. Even in this case, you are not allowed to use custom separator
+    #   (as defined in language files).
+
+    my $FormatSize = sub {
+        my ($Number) = @_;
+
+        my $ReadableSize;
+
+        if ( IsInteger($Number) ) {
+            $ReadableSize = $Number;
+        }
+        else {
+
+            # Get integer and decimal parts.
+            my ( $Integer, $Float ) = split( m{\.}, sprintf( "%.1f", $Number ) );
+
+            # Use ObjectManager to get Language object (not object in $Self), because unit test modifies language.
+            my $Separator = $Kernel::OM->Get('Kernel::Language')->{DecimalSeparator} || '.';
+
+            # Format size with provided decimal separator.
+            $ReadableSize = $Integer . $Separator . $Float;
+        }
+
+        return $ReadableSize;
+    };
+
     if ( !defined( $Param{Size} ) ) {
         $Kernel::OM->Get('Kernel::System::Log')->Log(
             Priority => 'error',
@@ -3589,45 +3616,31 @@ sub HumanReadableDataSize {
         return;
     }
 
-    my $LanguageObject = $Kernel::OM->Get('Kernel::Language');
-    my $Separator = $LanguageObject->{DecimalSeparator} || '.';    # Separator should not be empty.
-
     # Use convention described on https://en.wikipedia.org/wiki/File_size
     my ( $SizeStr, $ReadableSize );
 
-    # Use simple string concatenation to format real number. "sprintf" uses dot (.) as decimal separator unless
-    #   locale and POSIX (LC_NUMERIC) is used. Even in this case, you are not allowed to use custom separator
-    #   (as defined in language files).
     if ( $Param{Size} >= ( 1024**4 ) ) {
-        $ReadableSize = $Self->_FormatRealNumber(
-            Size => $Param{Size} / ( 1024**4 ),
-            Separator => $Separator,
-        );
-        $SizeStr = $LanguageObject->Translate( '%s TB', $ReadableSize );
+
+        $ReadableSize = $FormatSize->( $Param{Size} / ( 1024**4 ) );
+        $SizeStr = $Kernel::OM->Get('Kernel::Language')->Translate( '%s TB', $ReadableSize );
     }
     elsif ( $Param{Size} >= ( 1024**3 ) ) {
-        $ReadableSize = $Self->_FormatRealNumber(
-            Size => $Param{Size} / ( 1024**3 ),
-            Separator => $Separator,
-        );
-        $SizeStr = $LanguageObject->Translate( '%s GB', $ReadableSize );
+
+        $ReadableSize = $FormatSize->( $Param{Size} / ( 1024**3 ) );
+        $SizeStr = $Kernel::OM->Get('Kernel::Language')->Translate( '%s GB', $ReadableSize );
     }
     elsif ( $Param{Size} >= ( 1024**2 ) ) {
-        $ReadableSize = $Self->_FormatRealNumber(
-            Size => $Param{Size} / ( 1024**2 ),
-            Separator => $Separator,
-        );
-        $SizeStr = $LanguageObject->Translate( '%s MB', $ReadableSize );
+
+        $ReadableSize = $FormatSize->( $Param{Size} / ( 1024**2 ) );
+        $SizeStr = $Kernel::OM->Get('Kernel::Language')->Translate( '%s MB', $ReadableSize );
     }
     elsif ( $Param{Size} >= 1024 ) {
-        $ReadableSize = $Self->_FormatRealNumber(
-            Size      => $Param{Size} / 1024,
-            Separator => $Separator,
-        );
-        $SizeStr = $LanguageObject->Translate( '%s KB', $ReadableSize );
+
+        $ReadableSize = $FormatSize->( $Param{Size} / 1024 );
+        $SizeStr = $Kernel::OM->Get('Kernel::Language')->Translate( '%s KB', $ReadableSize );
     }
     else {
-        $SizeStr = $LanguageObject->Translate( '%s B', $Param{Size} );
+        $SizeStr = $Kernel::OM->Get('Kernel::Language')->Translate( '%s B', $Param{Size} );
     }
 
     return $SizeStr;
@@ -6027,44 +6040,6 @@ sub UserInitialsGet {
     }
 
     return $UserInitials;
-}
-
-=head2 _FormatRealNumber()
-
-Format a real number, with one decimal place.
-
-    my $RealNumber = $Self->_FormatRealNumber(
-        Size      => '28.3263',
-        Separator => '.',
-    );
-
-Returns formatted real number with precision of one decimal place:
-
-    $RealNumber = '28.3';
-
-If passed number is an integer, it will be returned as-is.
-
-=cut
-
-sub _FormatRealNumber {
-    my ( $Self, %Param ) = @_;
-
-    my $Size = $Param{Size};
-    my $ReadableSize;
-
-    if ( IsInteger($Size) ) {
-        $ReadableSize = $Size;
-    }
-    else {
-
-        # Get integer and decimal parts.
-        my ( $Integer, $Float ) = split( m{\.}, sprintf( "%.1f", $Size ) );
-
-        # Format size with provided decimal separator.
-        $ReadableSize = $Integer . $Param{Separator} . $Float;
-    }
-
-    return $ReadableSize;
 }
 
 1;
