@@ -409,11 +409,9 @@ for my $Test (@Tests) {
     );
 
     # sort result
-    @ReturnedTicketIDs = sort @ReturnedTicketIDs;
-
     $Self->IsDeeply(
-        \@ReturnedTicketIDs,
-        $Test->{Result},
+        sort \@ReturnedTicketIDs,
+        sort $Test->{Result},
         "$Test->{Name} ticket search",
     );
 }
