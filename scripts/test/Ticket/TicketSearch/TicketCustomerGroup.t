@@ -407,8 +407,6 @@ for my $Test (@Tests) {
         SortBy  => ['TicketNumber'],
         Result  => 'ARRAY',
     );
-
-    # sort result
     $Self->IsDeeply(
         sort \@ReturnedTicketIDs,
         sort $Test->{Result},
