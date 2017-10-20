@@ -98,10 +98,25 @@ Returns 1 on success
 sub CheckPreviousRequirement {
     my ( $Self, %Param ) = @_;
 
-    print "\n";
+    my $Verbose = $Param{CommandlineOptions}->{Verbose} || 0;
 
-    # check DB connection is possible
-    my $ConnectionCheck = $Kernel::OM->Get('Kernel::System::Console::Command::Maint::Database::Check')->Execute();
+    print "\n" if $Verbose;
+
+    # Localize standard output and redirect it to a variable in order to decide whether should it be shown later.
+    my $StandardOutput;
+    my $ConnectionCheck;
+    {
+        local *STDOUT = *STDOUT;
+        undef *STDOUT;
+        open STDOUT, '>:utf8', \$StandardOutput;    ## no critic
+
+        # Check if DB connection is possible.
+        $ConnectionCheck = $Kernel::OM->Get('Kernel::System::Console::Command::Maint::Database::Check')->Execute();
+    }
+
+    print $StandardOutput if $Verbose;
+
+    print "\n" if $Verbose;
 
     if ( !defined $ConnectionCheck || $ConnectionCheck ne 0 ) {
         print "\n    Error: Not possible to perform DB connection!\n\n";
