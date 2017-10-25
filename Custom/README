@@ -3,7 +3,7 @@ for customizations, you can do this in the $OTRS_HOME/Custom/ directory.
 
 Example:
 
-  You need to modify Kernel/System/Service.pm to add an customization, copy
+  You need to modify Kernel/System/Service.pm to add a customization. Copy
   Kernel/System/Service.pm to Custom/Kernel/System/Service.pm and modify it.
   This module will be used instead of the original Service.pm.
 
